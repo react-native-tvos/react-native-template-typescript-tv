@@ -22,31 +22,29 @@
 - Elegant usage directly within the [React Native CLI](https://github.com/react-native-community/cli)
 - Consistent with the default React Native template
 - Minimal additional dependencies
+- Support for Apple TV and Android TV using the [React Native for TV](https://github.com/react-native-tvos/react-native-tvos) package
 
 ## :arrow_forward: Usage
 
 ```sh
-npx react-native init MyApp --template react-native-template-typescript
+npx react-native init MyApp --template react-native-template-typescript-tv
 ```
 
 ### Usage with older versions of React Native
 
-#### e.g. `react-native@0.62.x`
+#### e.g. `react-native-tvos@0.63.1-3` (previous versions do not have TS types for TV props)
 
 ```sh
-npx react-native init MyApp --template react-native-template-typescript@6.4.*
+npx react-native init MyApp --template react-native-template-typescript-tv@6.5.8
 ```
 
 See the below table to find out which version of the template to use.
 
-#### React Native <=> Template Version
+#### react-native-tvos Version <=> Template Version
 
 | React Native  	| Template  	|
 |---	            |---	        |
-| 0.63  	        | 6.5.*       |
-| 0.62  	        | 6.4.*       |
-| 0.61  	        | 6.3.*       |
-| 0.60  	        | 6.2.*       |
+| 0.63.1-3  	    | 6.5.8       |
 
 ### Note on the legacy CLI
 There seems to be quite some confusion about the legacy CLI. This template only works with the new CLI. Make sure you have uninstalled the legacy `react-native-cli` first (`npm uninstall -g react-native-cli`), for the below command to work. If you wish to not use `npx`, you can also install the new CLI globally (`npm i -g @react-native-community/cli` or `yarn global add @react-native-community/cli`).
