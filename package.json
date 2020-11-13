@@ -20,10 +20,10 @@
     "template",
     "boilerplate"
   ],
-  "author": "Emin Khateeb <emin@emin.ch>",
+  "author": "Emin Khateeb <emin@emin.ch>, with TV modifications by Doug Lowder <douglowder@mac.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/emin93/react-native-template-typescript/issues"
+    "url": "https://github.com/react-native-tvos/react-native-template-typescript-tv/issues"
   },
   "homepage": "https://github.com/react-native-tvos/react-native-template-typescript-tv#readme"
 }

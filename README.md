@@ -35,7 +35,7 @@ npx react-native init MyApp --template react-native-template-typescript-tv
 #### e.g. `react-native-tvos@0.63.1-3` (previous versions do not have TS types for TV props)
 
 ```sh
-npx react-native init MyApp --template react-native-template-typescript@6.5.8
+npx react-native init MyApp --template react-native-template-typescript-tv@6.5.8
 ```
 
 See the below table to find out which version of the template to use.
