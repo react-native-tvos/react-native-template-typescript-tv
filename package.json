@@ -1,6 +1,6 @@
 {
   "name": "react-native-template-typescript-tv",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Clean and minimalist React Native template for a quick start with TypeScript for Android TV and Apple TV.",
   "scripts": {
     "prepublishOnly": "npm --no-git-tag-version version $TRAVIS_TAG"
