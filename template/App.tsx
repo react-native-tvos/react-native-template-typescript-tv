@@ -15,8 +15,6 @@ import {
   ScrollView,
   View,
   Text,
-  useTVEventHandler,
-  HWFocusEvent,
 } from 'react-native';
 
 import {
@@ -32,11 +30,6 @@ import 'react-native/tvos-types.d';
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
-  const [lastEventType, setLastEventType] = React.useState('');
-  const myTVEventHandler = (evt: HWFocusEvent) => {
-    setLastEventType(evt.eventType);
-  };
-  useTVEventHandler(myTVEventHandler);
   return (
     <>
       <SafeAreaView>
@@ -44,12 +37,6 @@ const App = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <Header />
-          <View style={styles.engine}>
-            <Text style={styles.footer}>TVEvent: {lastEventType}</Text>
-            {global.HermesInternal == null ? null : (
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            )}
-          </View>
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
