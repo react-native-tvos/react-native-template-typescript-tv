@@ -44,7 +44,9 @@ See the below table to find out which version of the template to use.
 
 | React Native  	| Template  	|
 |---	            |---	        |
-| 0.63.1-3  	    | 6.5.8       |
+| 0.63.1-3  	    | 6.5.8-0     |
+| 0.66.3-0  	    | 6.5.8-3     |
+| 0.68.1-1  	    | 6.5.8-4     |
 
 ### Note on the legacy CLI
 There seems to be quite some confusion about the legacy CLI. This template only works with the new CLI. Make sure you have uninstalled the legacy `react-native-cli` first (`npm uninstall -g react-native-cli`), for the below command to work. If you wish to not use `npx`, you can also install the new CLI globally (`npm i -g @react-native-community/cli` or `yarn global add @react-native-community/cli`).

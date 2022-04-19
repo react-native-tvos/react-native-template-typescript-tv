@@ -2,8 +2,8 @@
  * Sample React Native App
  * https://github.com/facebook/react-native
  *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
+ * Generated with the TypeScript template for TV
+ * https://github.com/react-native-tvos/react-native-template-typescript-tv
  *
  * @format
  */
