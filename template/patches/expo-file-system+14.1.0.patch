@@ -1,0 +1,42 @@
+diff --git a/node_modules/expo-file-system/ios/EXFileSystem.podspec b/node_modules/expo-file-system/ios/EXFileSystem.podspec
+index ce13f65..a09d861 100644
+--- a/node_modules/expo-file-system/ios/EXFileSystem.podspec
++++ b/node_modules/expo-file-system/ios/EXFileSystem.podspec
+@@ -10,16 +10,11 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '12.0'
++  s.platforms      = { :ios => '12.0', :tvos => '12.0' }
+   s.source         = { :git => 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+ 
+   s.dependency 'ExpoModulesCore'
+ 
+-  if !$ExpoUseSources&.include?(package['name']) && ENV['EXPO_USE_SOURCE'].to_i == 0 && File.exist?("#{s.name}.xcframework") && Gem::Version.new(Pod::VERSION) >= Gem::Version.new('1.10.0')
+-    s.source_files = "#{s.name}/**/*.h"
+-    s.vendored_frameworks = "#{s.name}.xcframework"
+-  else
+-    s.source_files = "#{s.name}/**/*.{h,m}"
+-  end
++  s.source_files = "#{s.name}/**/*.{h,m}"
+ end
+diff --git a/node_modules/expo-file-system/ios/EXFileSystem/EXFileSystem.m b/node_modules/expo-file-system/ios/EXFileSystem/EXFileSystem.m
+index 7629a03..78976c6 100644
+--- a/node_modules/expo-file-system/ios/EXFileSystem/EXFileSystem.m
++++ b/node_modules/expo-file-system/ios/EXFileSystem/EXFileSystem.m
+@@ -1057,10 +1057,14 @@ EX_EXPORT_METHOD_AS(getTotalDiskCapacityAsync, getTotalDiskCapacityAsyncWithReso
+ // '<ARCType> *__autoreleasing*' problem solution: https://stackoverflow.com/a/8862061/4337317
+ - (NSNumber *)freeDiskStorageWithError:(out NSError * __autoreleasing *)error
+ {
++#if TARGET_OS_TV
++  return @(0);
++#else
+   NSDictionary *results = [self documentFileResourcesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] 
+                                                        error:error];
+ 
+   return results[NSURLVolumeAvailableCapacityForImportantUsageKey];
++#endif
+ }
+ 
+ @end

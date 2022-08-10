@@ -1,0 +1,49 @@
+diff --git a/node_modules/expo-updates/ios/EXUpdates.podspec b/node_modules/expo-updates/ios/EXUpdates.podspec
+index b2ad346..38b6418 100644
+--- a/node_modules/expo-updates/ios/EXUpdates.podspec
++++ b/node_modules/expo-updates/ios/EXUpdates.podspec
+@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '12.0'
++  s.platforms      = { :ios => '12.0', :tvos => '12.0' }
+   s.swift_version  = '5.4'
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+diff --git a/node_modules/expo-updates/ios/EXUpdates/EXUpdates.h b/node_modules/expo-updates/ios/EXUpdates/EXUpdates.h
+index ff5c300..e539cae 100644
+--- a/node_modules/expo-updates/ios/EXUpdates/EXUpdates.h
++++ b/node_modules/expo-updates/ios/EXUpdates/EXUpdates.h
+@@ -1,5 +1,11 @@
+ // Copyright 2018-present 650 Industries. All rights reserved.
+ 
++#if __has_include("EXUpdates-tvOS-umbrella.h")
++#import "EXUpdates-tvOS-umbrella.h"
++#endif
++#if __has_include("EXUpdates-iOS-umbrella.h")
++#import "EXUpdates-iOS-umbrella.h"
++#endif
+ #if __has_include("EXUpdates-umbrella.h")
+ #import "EXUpdates-umbrella.h"
+ #endif
+diff --git a/node_modules/expo-updates/ios/EXUpdates/EXUpdatesDevLauncherController.h b/node_modules/expo-updates/ios/EXUpdates/EXUpdatesDevLauncherController.h
+index 8b61f10..2ba071c 100644
+--- a/node_modules/expo-updates/ios/EXUpdates/EXUpdatesDevLauncherController.h
++++ b/node_modules/expo-updates/ios/EXUpdates/EXUpdatesDevLauncherController.h
+@@ -1,6 +1,14 @@
+ //  Copyright © 2021 650 Industries. All rights reserved.
+ 
+-#import <EXUpdatesInterface/EXUpdatesInterface-umbrella.h>
++#if __has_include("EXUpdatesInterface-tvOS-umbrella.h")
++#import "EXUpdatesInterface-tvOS-umbrella.h"
++#endif
++#if __has_include("EXUpdatesInterface-iOS-umbrella.h")
++#import "EXUpdatesInterface-iOS-umbrella.h"
++#endif
++#if __has_include("EXUpdatesInterface-umbrella.h")
++#import "EXUpdatesInterface-umbrella.h"
++#endif
+ 
+ #import <Foundation/Foundation.h>
+ 

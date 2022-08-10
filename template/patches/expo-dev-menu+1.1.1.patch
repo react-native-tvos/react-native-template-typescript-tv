@@ -1,0 +1,210 @@
+diff --git a/node_modules/expo-dev-menu/expo-dev-menu.podspec b/node_modules/expo-dev-menu/expo-dev-menu.podspec
+index f7634fd..974ea93 100644
+--- a/node_modules/expo-dev-menu/expo-dev-menu.podspec
++++ b/node_modules/expo-dev-menu/expo-dev-menu.podspec
+@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '12.0'
++  s.platforms      = { :ios => '12.0', :tvos => '12.0' }
+   s.swift_version  = '5.2'
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+@@ -86,14 +86,14 @@ Pod::Spec.new do |s|
+     reanimated.dependency 'React-Core'
+     reanimated.dependency 'React-CoreModules'
+     reanimated.dependency 'React-Core/DevSupport'
+-    reanimated.dependency 'React-RCTActionSheet'
++    # reanimated.dependency 'React-RCTActionSheet'
+     reanimated.dependency 'React-RCTNetwork'
+     reanimated.dependency 'React-RCTAnimation'
+     reanimated.dependency 'React-RCTLinking'
+     reanimated.dependency 'React-RCTBlob'
+     reanimated.dependency 'React-RCTSettings'
+     reanimated.dependency 'React-RCTText'
+-    reanimated.dependency 'React-RCTVibration'
++    # reanimated.dependency 'React-RCTVibration'
+     reanimated.dependency 'React-RCTImage'
+     reanimated.dependency 'React-Core/RCTWebSocket'
+     reanimated.dependency 'React-cxxreact'
+diff --git a/node_modules/expo-dev-menu/ios/DevMenuGestureRecognizer.swift b/node_modules/expo-dev-menu/ios/DevMenuGestureRecognizer.swift
+index a28cb65..9d31419 100644
+--- a/node_modules/expo-dev-menu/ios/DevMenuGestureRecognizer.swift
++++ b/node_modules/expo-dev-menu/ios/DevMenuGestureRecognizer.swift
+@@ -8,6 +8,7 @@ class DevMenuGestureRecognizerDelegate {
+   */
+   @objc
+   public func handleLongPress(_ gestureReconizer: UILongPressGestureRecognizer) {
++    #if !os(tvOS)
+     if gestureReconizer.state == UIGestureRecognizer.State.began {
+       if DevMenuManager.shared.toggleMenu() {
+         let feedback = UIImpactFeedbackGenerator(style: .light)
+@@ -16,6 +17,7 @@ class DevMenuGestureRecognizerDelegate {
+       }
+       cancelGesture(gestureReconizer)
+     }
++    #endif
+   }
+ 
+   /**
+@@ -32,8 +34,9 @@ class DevMenuGestureRecognizer: UILongPressGestureRecognizer {
+ 
+   init() {
+     super.init(target: DevMenuGestureRecognizer.gestureDelegate, action: #selector(DevMenuGestureRecognizer.gestureDelegate.handleLongPress(_:)))
+-
++    #if !os(tvOS)
+     numberOfTouchesRequired = 3
++    #endif
+     minimumPressDuration = 0.5
+     allowableMovement = 30
+   }
+diff --git a/node_modules/expo-dev-menu/ios/DevMenuViewController.swift b/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
+index 071cfe9..9ce294e 100644
+--- a/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
++++ b/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
+@@ -44,6 +44,8 @@ class DevMenuViewController: UIViewController {
+     reactRootView?.becomeFirstResponder()
+   }
+ 
++  #if !os(tvOS)
++  
+   override var shouldAutorotate: Bool {
+     get {
+       return true
+@@ -62,6 +64,8 @@ class DevMenuViewController: UIViewController {
+     }
+   }
+ 
++  #endif
++  
+   @available(iOS 12.0, *)
+   override var overrideUserInterfaceStyle: UIUserInterfaceStyle {
+     get {
+diff --git a/node_modules/expo-dev-menu/ios/DevMenuWindow.swift b/node_modules/expo-dev-menu/ios/DevMenuWindow.swift
+index 3655f29..d5ce712 100644
+--- a/node_modules/expo-dev-menu/ios/DevMenuWindow.swift
++++ b/node_modules/expo-dev-menu/ios/DevMenuWindow.swift
+@@ -12,7 +12,11 @@ class DevMenuWindow: UIWindow {
+     self.rootViewController = DevMenuViewController(manager: manager)
+     self.backgroundColor = UIColor.clear
+     self.bounds = UIScreen.main.bounds
++    #if os(tvOS)
++    self.windowLevel = .alert
++    #else
+     self.windowLevel = .statusBar
++    #endif
+     self.isHidden = true
+   }
+ 
+diff --git a/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.m b/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.m
+index cac0929..cf96f2c 100644
+--- a/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.m
++++ b/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.m
+@@ -22,9 +22,11 @@ RCT_EXPORT_METHOD(copyToClipboardAsync:(NSString *)content
+                   resolver:(RCTPromiseResolveBlock)resolve
+                   rejecter:(RCTPromiseRejectBlock)reject)
+ {
++#if !TARGET_OS_TV
+   UIPasteboard *clipboard = [UIPasteboard generalPasteboard];
+   clipboard.string = (content ?: @"");
+   resolve(nil);
++#endif
+ }
+ 
+ RCT_EXTERN_METHOD(fireCallback:(NSString *)name
+diff --git a/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift b/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift
+index 1ed949b..d3c1211 100644
+--- a/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift
++++ b/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift
+@@ -1,6 +1,8 @@
+ // Copyright 2015-present 650 Industries. All rights reserved.
+ 
++#if !os(tvOS)
+ import SafariServices
++#endif
+ import React
+ 
+ @objc(DevMenuInternalModule)
+diff --git a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNFlingHandler.m b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNFlingHandler.m
+index 90be8de..02988c3 100644
+--- a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNFlingHandler.m
++++ b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNFlingHandler.m
+@@ -72,7 +72,9 @@
+   [super resetConfig];
+   UISwipeGestureRecognizer *recognizer = (UISwipeGestureRecognizer *)_recognizer;
+   recognizer.direction = UISwipeGestureRecognizerDirectionRight;
++#if !TARGET_OS_TV
+   recognizer.numberOfTouchesRequired = 1;
++#endif
+ }
+ 
+ - (void)configure:(NSDictionary *)config
+diff --git a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPanHandler.m b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPanHandler.m
+index 6110539..7be162e 100644
+--- a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPanHandler.m
++++ b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPanHandler.m
+@@ -235,9 +235,9 @@
+   if (@available(iOS 13.4, *)) {
+     recognizer.allowedScrollTypesMask = 0;
+   }
+-#endif
+   recognizer.minimumNumberOfTouches = 1;
+   recognizer.maximumNumberOfTouches = NSUIntegerMax;
++#endif
+   recognizer.minDistSq = NAN;
+   recognizer.minVelocitySq = NAN;
+ }
+diff --git a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPinchHandler.m b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPinchHandler.m
+index 618138c..014466a 100644
+--- a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPinchHandler.m
++++ b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNPinchHandler.m
+@@ -10,7 +10,11 @@
+ 
+ #import "DevMenuRNPinchHandler.h"
+ 
++#if TARGET_OS_TV
++@interface DevMenuRNBetterPinchRecognizer : UIGestureRecognizer
++#else
+ @interface DevMenuRNBetterPinchRecognizer : UIPinchGestureRecognizer
++#endif
+ 
+ - (id)initWithGestureHandler:(DevMenuRNGestureHandler*)gestureHandler;
+ 
+@@ -31,7 +35,9 @@
+ - (void)handleGesture:(UIGestureRecognizer *)recognizer
+ {
+   if (self.state == UIGestureRecognizerStateBegan) {
++#if !TARGET_OS_TV
+     self.scale = 1;
++#endif
+   }
+   [_gestureHandler handleGesture:recognizer];
+ }
+diff --git a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNRotationHandler.m b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNRotationHandler.m
+index 2d566ca..cfcbeae 100644
+--- a/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNRotationHandler.m
++++ b/node_modules/expo-dev-menu/vendored/react-native-gesture-handler/ios/Handlers/DevMenuRNRotationHandler.m
+@@ -7,8 +7,11 @@
+ //
+ 
+ #import "DevMenuRNRotationHandler.h"
+-
++#if TARGET_OS_TV
++@interface DevMenuRNBetterRotationRecognizer : UIGestureRecognizer
++#else
+ @interface DevMenuRNBetterRotationRecognizer : UIRotationGestureRecognizer
++#endif
+ 
+ - (id)initWithGestureHandler:(DevMenuRNGestureHandler*)gestureHandler;
+ 
+@@ -29,7 +32,9 @@
+ - (void)handleGesture:(UIGestureRecognizer *)recognizer
+ {
+   if (self.state == UIGestureRecognizerStateBegan) {
++#if !TARGET_OS_TV
+     self.rotation = 0;
++#endif
+   }
+   [_gestureHandler handleGesture:recognizer];
+ }

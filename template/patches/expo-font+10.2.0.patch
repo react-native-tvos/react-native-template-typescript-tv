@@ -1,0 +1,13 @@
+diff --git a/node_modules/expo-font/ios/EXFont.podspec b/node_modules/expo-font/ios/EXFont.podspec
+index 9b88efb..a6b6644 100644
+--- a/node_modules/expo-font/ios/EXFont.podspec
++++ b/node_modules/expo-font/ios/EXFont.podspec
+@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '12.0'
++  s.platforms      = { :ios => '12.0', :tvos => '12.0' }
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+ 

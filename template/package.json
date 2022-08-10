@@ -3,15 +3,25 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "postinstall": "patch-package",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "tvos": "expo run:ios --scheme HelloWorld-tvOS",
+    "web": "expo start --web"
   },
   "dependencies": {
+    "asn1decoder": "https://github.com/douglowder/ASN1Decoder#tvos",
+    "expo": "~46.0.6",
+    "expo-dev-client": "~1.1.1",
+    "expo-splash-screen": "~0.16.1",
+    "expo-status-bar": "~1.4.0",
+    "expo-updates": "~0.14.3",
+    "patch-package": "^6.4.7",
     "react": "17.0.2",
-    "react-native": "npm:react-native-tvos@0.68.2-5"
+    "react-native": "npm:react-native-tvos@0.68.2-5",
+    "react-native-codegen": "^0.71.0",
+    "react-native-web": "~0.18.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

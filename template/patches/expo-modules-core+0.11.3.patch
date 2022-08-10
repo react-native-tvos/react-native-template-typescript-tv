@@ -1,0 +1,102 @@
+diff --git a/node_modules/expo-modules-core/ios/AppDelegates/ExpoAppDelegate.swift b/node_modules/expo-modules-core/ios/AppDelegates/ExpoAppDelegate.swift
+index 5506189..82534cb 100644
+--- a/node_modules/expo-modules-core/ios/AppDelegates/ExpoAppDelegate.swift
++++ b/node_modules/expo-modules-core/ios/AppDelegates/ExpoAppDelegate.swift
+@@ -187,6 +187,7 @@ open class ExpoAppDelegate: UIResponder, UIApplicationDelegate {
+     }
+   }
+ 
++#if !os(tvOS)
+   open func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+     let selector = #selector(application(_:performActionFor:completionHandler:))
+     let subs = subscribers.filter { $0.responds(to: selector) }
+@@ -209,6 +210,7 @@ open class ExpoAppDelegate: UIResponder, UIApplicationDelegate {
+       subscriber.application?(application, performActionFor: shortcutItem, completionHandler: handler)
+     }
+   }
++#endif
+ 
+   // MARK: - Background Fetch
+ 
+diff --git a/node_modules/expo-modules-core/ios/ExpoModulesCore.h b/node_modules/expo-modules-core/ios/ExpoModulesCore.h
+index 7490a36..6e3ba78 100644
+--- a/node_modules/expo-modules-core/ios/ExpoModulesCore.h
++++ b/node_modules/expo-modules-core/ios/ExpoModulesCore.h
+@@ -4,6 +4,12 @@
+ // Otherwise they won't be visible in `ExpoModulesCore-Swift.h`.
+ #import <React/RCTView.h>
+ 
++#if __has_include("ExpoModulesCore-tvOS-umbrella.h")
++#import "ExpoModulesCore-tvOS-umbrella.h"
++#endif
++#if __has_include("ExpoModulesCore-iOS-umbrella.h")
++#import "ExpoModulesCore-iOS-umbrella.h"
++#endif
+ #if __has_include("ExpoModulesCore-umbrella.h")
+ #import "ExpoModulesCore-umbrella.h"
+ #endif
+diff --git a/node_modules/expo-modules-core/ios/ExpoModulesCore.podspec b/node_modules/expo-modules-core/ios/ExpoModulesCore.podspec
+index 6e198d8..b24259b 100644
+--- a/node_modules/expo-modules-core/ios/ExpoModulesCore.podspec
++++ b/node_modules/expo-modules-core/ios/ExpoModulesCore.podspec
+@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '12.0'
++  s.platforms      = { :ios => '12.0', :tvos => '12.0' }
+   s.swift_version  = '5.4'
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+diff --git a/node_modules/expo-modules-core/ios/Interfaces/BarcodeScanner/EXBarcodeScannerInterface.h b/node_modules/expo-modules-core/ios/Interfaces/BarcodeScanner/EXBarcodeScannerInterface.h
+index cdd27c4..e262aae 100644
+--- a/node_modules/expo-modules-core/ios/Interfaces/BarcodeScanner/EXBarcodeScannerInterface.h
++++ b/node_modules/expo-modules-core/ios/Interfaces/BarcodeScanner/EXBarcodeScannerInterface.h
+@@ -6,6 +6,7 @@
+ 
+ @protocol EXBarCodeScannerInterface
+ 
++#if !TARGET_OS_TV
+ - (void)setSession:(AVCaptureSession *)session;
+ - (void)setSessionQueue:(dispatch_queue_t)sessionQueue;
+ - (void)setOnBarCodeScanned:(void (^)(NSDictionary *))onBarCodeScanned;
+@@ -17,5 +18,6 @@
+ 
+ - (void)maybeStartBarCodeScanning;
+ - (void)stopBarCodeScanning;
++#endif
+ 
+ @end
+diff --git a/node_modules/expo-modules-core/ios/Interfaces/Camera/EXCameraInterface.h b/node_modules/expo-modules-core/ios/Interfaces/Camera/EXCameraInterface.h
+index 3b594f2..e9fdfa4 100644
+--- a/node_modules/expo-modules-core/ios/Interfaces/Camera/EXCameraInterface.h
++++ b/node_modules/expo-modules-core/ios/Interfaces/Camera/EXCameraInterface.h
+@@ -4,7 +4,9 @@
+ 
+ @protocol EXCameraInterface
+ 
++#if !TARGET_OS_TV
+ @property (nonatomic, strong) dispatch_queue_t sessionQueue;
+ @property (nonatomic, strong) AVCaptureSession *session;
++#endif
+ 
+ @end
+diff --git a/node_modules/expo-modules-core/ios/Interfaces/FaceDetector/EXFaceDetectorManagerInterface.h b/node_modules/expo-modules-core/ios/Interfaces/FaceDetector/EXFaceDetectorManagerInterface.h
+index c60e262..9bc29d4 100644
+--- a/node_modules/expo-modules-core/ios/Interfaces/FaceDetector/EXFaceDetectorManagerInterface.h
++++ b/node_modules/expo-modules-core/ios/Interfaces/FaceDetector/EXFaceDetectorManagerInterface.h
+@@ -6,6 +6,7 @@
+ 
+ @protocol EXFaceDetectorManagerInterface
+ 
++#if !TARGET_OS_TV
+ - (void)setSessionQueue:(dispatch_queue_t)sessionQueue;
+ - (void)setIsEnabled:(BOOL)enabled;
+ - (void)setOnFacesDetected:(void (^)(NSArray<NSDictionary *> *))onFacesDetected;
+@@ -16,5 +17,6 @@
+ - (void)maybeStartFaceDetectionOnSession:(AVCaptureSession *)session withPreviewLayer:(AVCaptureVideoPreviewLayer *)previewLayer;
+ - (void)maybeStartFaceDetectionOnSession:(AVCaptureSession *)session withPreviewLayer:(AVCaptureVideoPreviewLayer *)previewLayer mirrored:(BOOL) mirrored;
+ - (void)stopFaceDetection;
++#endif
+ 
+ @end

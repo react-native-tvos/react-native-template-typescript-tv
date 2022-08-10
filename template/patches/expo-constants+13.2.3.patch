@@ -1,0 +1,70 @@
+diff --git a/node_modules/expo-constants/ios/EXConstants.podspec b/node_modules/expo-constants/ios/EXConstants.podspec
+index c45ac48..44af4bb 100644
+--- a/node_modules/expo-constants/ios/EXConstants.podspec
++++ b/node_modules/expo-constants/ios/EXConstants.podspec
+@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '12.0'
++  s.platforms      = { :ios => '12.0', :tvos => '12.0' }
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+ 
+diff --git a/node_modules/expo-constants/ios/EXConstants/EXConstants.m b/node_modules/expo-constants/ios/EXConstants/EXConstants.m
+index 81267ea..351f938 100644
+--- a/node_modules/expo-constants/ios/EXConstants/EXConstants.m
++++ b/node_modules/expo-constants/ios/EXConstants/EXConstants.m
+@@ -3,10 +3,14 @@
+ #import <EXConstants/EXConstants.h>
+ #import <ExpoModulesCore/EXConstantsInterface.h>
+ 
++#if !TARGET_OS_TV
+ #import <WebKit/WKWebView.h>
++#endif
+ 
+ @interface EXConstants () {
++#if !TARGET_OS_TV
+   WKWebView *webView;
++#endif
+ }
+ 
+ @property (nonatomic, strong) NSString *webViewUserAgent;
+@@ -37,6 +41,9 @@ EX_EXPORT_METHOD_AS(getWebViewUserAgentAsync,
+                     getWebViewUserAgentWithResolver:(EXPromiseResolveBlock)resolve
+                     rejecter:(EXPromiseRejectBlock)reject)
+ {
++#if TARGET_OS_TV
++  resolve(EXNullIfNil(nil));
++#else
+   __weak EXConstants *weakSelf = self;
+   dispatch_async(dispatch_get_main_queue(), ^{
+     __strong EXConstants *strongSelf = weakSelf;
+@@ -61,6 +68,7 @@ EX_EXPORT_METHOD_AS(getWebViewUserAgentAsync,
+       }
+     }
+   });
++#endif
+ }
+ 
+ @end
+diff --git a/node_modules/expo-constants/ios/EXConstants/EXConstantsService.m b/node_modules/expo-constants/ios/EXConstants/EXConstantsService.m
+index 731a870..ca164e2 100644
+--- a/node_modules/expo-constants/ios/EXConstants/EXConstantsService.m
++++ b/node_modules/expo-constants/ios/EXConstants/EXConstantsService.m
+@@ -90,11 +90,15 @@ EX_REGISTER_MODULE();
+ 
+ - (CGFloat)statusBarHeight
+ {
++#if TARGET_OS_TV
++  return 0;
++#else
+   __block CGSize statusBarSize;
+   [EXUtilities performSynchronouslyOnMainThread:^{
+     statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+   }];
+   return MIN(statusBarSize.width, statusBarSize.height);
++#endif
+ }
+ 
+ - (NSString *)iosVersion
