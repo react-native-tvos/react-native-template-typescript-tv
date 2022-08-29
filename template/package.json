@@ -13,7 +13,6 @@
   "dependencies": {
     "asn1decoder": "https://github.com/douglowder/ASN1Decoder#tvos",
     "expo": "~46.0.6",
-    "expo-dev-client": "~1.1.1",
     "expo-splash-screen": "~0.16.1",
     "expo-status-bar": "~1.4.0",
     "expo-updates": "~0.14.3",
