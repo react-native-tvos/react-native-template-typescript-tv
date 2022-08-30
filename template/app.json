@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "HelloWorld",
-    "slug": "expo-template-bare",
+    "slug": "HelloWorld",
     "version": "1.0.0",
     "assetBundlePatterns": ["**/*"]
   }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document
-  type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB"
+  type="com.apple.InterfaceBuilder.AppleTV.Storyboard"
   version="3.0"
-  toolsVersion="16096"
-  targetRuntime="iOS.CocoaTouch"
+  toolsVersion="17150"
+  targetRuntime="AppleTV"
   propertyAccessControl="none"
   useAutolayout="YES"
   launchScreen="YES"
@@ -12,12 +12,10 @@
   colorMatched="YES"
   initialViewController="EXPO-VIEWCONTROLLER-1"
 >
-  <device id="retina5_5" orientation="portrait" appearance="light"/>
   <dependencies>
-    <deployment identifier="iOS"/>
-    <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
-    <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-    <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+      <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17122"/>
+      <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+      <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
   </dependencies>
   <scenes>
     <!--View Controller-->
