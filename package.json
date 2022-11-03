@@ -1,7 +1,7 @@
 {
-  "name": "react-native-template-typescript",
-  "version": "0.0.1",
-  "description": "Clean and minimalist React Native template for a quick start with TypeScript.",
+  "name": "react-native-template-typescript-tv",
+  "version": "6.11.9-0",
+  "description": "Clean and minimalist React Native TV template for a quick start with TypeScript.",
   "scripts": {
     "test": "exit 0"
   },
@@ -11,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/emin93/react-native-template-typescript.git"
+    "url": "git+https://github.com/react-native-tvos/react-native-template-typescript-tv.git"
   },
   "keywords": [
     "react-native",
@@ -20,10 +20,10 @@
     "template",
     "boilerplate"
   ],
-  "author": "Emin Khateeb <emin@emin.ch>",
+  "author": "Emin Khateeb <emin@emin.ch> and Doug Lowder <douglowder@mac.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/emin93/react-native-template-typescript/issues"
+    "url": "https://github.com/react-native-tvos/react-native-template-typescript-tv/issues"
   },
-  "homepage": "https://github.com/emin93/react-native-template-typescript#readme"
+  "homepage": "https://github.com/react-native-tvos/react-native-template-typescript-tv#readme"
 }
