@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {type PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -29,9 +29,11 @@ import {
 
 import 'react-native/tvos-types.d';
 
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
+const Section: React.FC<
+  PropsWithChildren<{
+    title: string;
+  }>
+> = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -66,7 +68,10 @@ const App = () => {
 
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>

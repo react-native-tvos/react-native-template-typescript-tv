@@ -3,6 +3,9 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 source 'https://github.com/react-native-tvos/react-native-tvos-podspecs.git'
 source 'https://cdn.cocoapods.org/'
+
+platform :ios, '12.4'
+
 install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
@@ -18,11 +21,8 @@ target 'HelloWorld' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # to enable hermes on iOS, change `false` to `true` and then install pods
-    :production => production,
-    :hermes_enabled => flags[:hermes_enabled],
+    :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
-    :flipper_configuration => FlipperConfiguration.enabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
@@ -47,8 +47,8 @@ target 'HelloWorld-tvOS' do
     # Hermes not yet available on tvOS
     :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
-    # An abosolute path to your application root.
-    :app_path => "#{Dir.pwd}/.."
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
   target 'HelloWorld-tvOSTests' do
