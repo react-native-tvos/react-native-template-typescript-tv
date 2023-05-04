@@ -27,8 +27,6 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import 'react-native/tvos-types.d';
-
 const Section: React.FC<
   PropsWithChildren<{
     title: string;
