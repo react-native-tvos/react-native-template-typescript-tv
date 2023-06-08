@@ -24,7 +24,7 @@ react-native run-ios --scheme=MyApp-tvOS --simulator="Apple TV"
 ## :arrow_forward: Usage (Expo CLI)
 
 ```sh
-yarn create react-native-app MyApp --template react-native-template-typescript-tv
+yarn create react-native-app MyApp --template https://github.com/react-native-tvos/react-native-template-typescript-tv --template-path template
 cd MyApp
 npx expo run:android
 npx expo run:ios
