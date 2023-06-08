@@ -30,6 +30,27 @@ npx expo run:android
 npx expo run:ios
 npx expo run:ios --scheme MyApp-tvOS --device "Apple TV"
 ```
+### Usage with older versions of React Native for TV
+
+#### e.g. `react-native-tvos@0.63.1-3` (previous versions do not have TS types for TV props)
+
+```sh
+npx react-native init MyApp --template react-native-template-typescript-tv@6.5.8
+```
+
+> Versions prior to 6.12.0 do not support the Expo CLI.
+
+See the below table to find out which version of the template to use.
+
+#### react-native-tvos Version <=> Template Version
+
+| React Native  	| Template  	|
+|---	            |---	        |
+| 0.63.1-3  	    | 6.5.8-0     |
+| 0.66.3-0  	    | 6.5.8-3     |
+| 0.68.1-1  	    | 6.5.8-4     |
+| 0.69.8-2        | 6.11.9-0    |
+| 0.71.10-x       | 6.12.0      |
 
 ## :warning: React Native CLI
 
