@@ -1,6 +1,6 @@
 {
   "name": "react-native-template-typescript-tv",
-  "version": "6.12.0",
+  "version": "6.13.0",
   "description": "Clean and minimalist React Native TV template for a quick start with TypeScript.",
   "scripts": {
     "test": "exit 0"
