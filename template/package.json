@@ -4,6 +4,7 @@
   "version": "50.0.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "postinstall": "patch-package",
     "start": "expo start",
     "android": "expo start --android",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
