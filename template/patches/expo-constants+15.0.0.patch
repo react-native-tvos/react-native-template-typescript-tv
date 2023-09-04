@@ -1,3 +1,28 @@
+diff --git a/node_modules/expo-constants/ios/ConstantsModule.swift b/node_modules/expo-constants/ios/ConstantsModule.swift
+index e9d4871..0a3e1e8 100644
+--- a/node_modules/expo-constants/ios/ConstantsModule.swift
++++ b/node_modules/expo-constants/ios/ConstantsModule.swift
+@@ -1,5 +1,7 @@
+ import ExpoModulesCore
++#if !os(tvOS)
+ import WebKit
++#endif
+ 
+ public class ConstantsModule: Module {
+   private lazy var constants = appContext?.constants?.constants() as? [String: Any] ?? [:]
+@@ -12,8 +14,12 @@ public class ConstantsModule: Module {
+     }
+ 
+     AsyncFunction("getWebViewUserAgentAsync") { () -> String? in
++#if os(tvOS)
++      return ""
++#else
+       let webView = WKWebView()
+       return webView.value(forKey: "userAgent") as? String
++#endif
+     }.runOnQueue(.main)
+   }
+ }
 diff --git a/node_modules/expo-constants/ios/EXConstants.podspec b/node_modules/expo-constants/ios/EXConstants.podspec
 index df51cfe..5e694cd 100644
 --- a/node_modules/expo-constants/ios/EXConstants.podspec
@@ -11,3 +36,43 @@ index df51cfe..5e694cd 100644
    s.swift_version  = '5.4'
    s.source         = { git: 'https://github.com/expo/expo.git' }
    s.static_framework = true
+diff --git a/node_modules/expo-constants/ios/EXConstantsService.m b/node_modules/expo-constants/ios/EXConstantsService.m
+index 4192917..dac8605 100644
+--- a/node_modules/expo-constants/ios/EXConstantsService.m
++++ b/node_modules/expo-constants/ios/EXConstantsService.m
+@@ -88,11 +88,15 @@ EX_REGISTER_MODULE();
+ 
+ - (CGFloat)statusBarHeight
+ {
++#if TARGET_OS_TV
++  return 0;
++#else
+   __block CGSize statusBarSize;
+   [EXUtilities performSynchronouslyOnMainThread:^{
+     statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+   }];
+   return MIN(statusBarSize.width, statusBarSize.height);
++#endif
+ }
+ 
+ - (NSString *)iosVersion
+@@ -104,14 +108,15 @@ EX_REGISTER_MODULE();
+ {
+   UIUserInterfaceIdiom idiom = UI_USER_INTERFACE_IDIOM();
+ 
+-  // tv and carplay aren't accounted for here
+   switch (idiom) {
++    case UIUserInterfaceIdiomTV:
++      return @"tv";
+     case UIUserInterfaceIdiomPhone:
+-    return @"handset";
++      return @"handset";
+     case UIUserInterfaceIdiomPad:
+-    return @"tablet";
++      return @"tablet";
+     default:
+-    return @"unsupported";
++      return @"unsupported";
+   }
+ }
+ 
