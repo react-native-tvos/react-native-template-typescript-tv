@@ -4,14 +4,15 @@
   "version": "50.0.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "patch-package",
     "start": "expo start",
-    "android": "expo run:android",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
+    "asn1decoder": "./dependencies/asn1decoder-1.8.0.tgz",
     "expo": "~50.0.0-alpha.1",
     "expo-status-bar": "~1.7.1",
     "react": "18.2.0",
@@ -30,6 +31,7 @@
     "eslint": "^8.19.0",
     "jest": "^29.2.1",
     "patch-package": "^7.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
     "typescript": "^5.1.3"

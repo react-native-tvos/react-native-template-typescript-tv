@@ -1,0 +1,57 @@
+diff --git a/node_modules/expo-updates/ios/EXUpdates.podspec b/node_modules/expo-updates/ios/EXUpdates.podspec
+index 8a560b3..5220cf2 100644
+--- a/node_modules/expo-updates/ios/EXUpdates.podspec
++++ b/node_modules/expo-updates/ios/EXUpdates.podspec
+@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '13.0'
++  s.platforms      = { :ios => '13.0', :tvos => '13.0' }
+   s.swift_version  = '5.4'
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+diff --git a/node_modules/expo-updates/ios/EXUpdates/ErrorRecovery.swift b/node_modules/expo-updates/ios/EXUpdates/ErrorRecovery.swift
+index 83086b6..14857a4 100644
+--- a/node_modules/expo-updates/ios/EXUpdates/ErrorRecovery.swift
++++ b/node_modules/expo-updates/ios/EXUpdates/ErrorRecovery.swift
+@@ -439,7 +439,11 @@ public final class ErrorRecovery: NSObject {
+   }
+ 
+   private static func errorLogFile() -> URL {
++    #if os(tvOS)
++    let applicationDocumentsDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).last
++    #else
+     let applicationDocumentsDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).last
++    #endif
+     return applicationDocumentsDirectory!.appendingPathComponent(ErrorLogFile)
+   }
+ }
+diff --git a/node_modules/expo-updates/ios/EXUpdates/Logging/UpdatesLogReader.swift b/node_modules/expo-updates/ios/EXUpdates/Logging/UpdatesLogReader.swift
+index 958212c..f9d6ca1 100644
+--- a/node_modules/expo-updates/ios/EXUpdates/Logging/UpdatesLogReader.swift
++++ b/node_modules/expo-updates/ios/EXUpdates/Logging/UpdatesLogReader.swift
+@@ -4,7 +4,6 @@ import Foundation
+ import OSLog
+ 
+ import ExpoModulesCore
+-import SafariServices
+ 
+ /**
+  Class to read expo-updates logs using OSLogReader
+diff --git a/node_modules/expo-updates/ios/EXUpdates/UpdatesUtils.swift b/node_modules/expo-updates/ios/EXUpdates/UpdatesUtils.swift
+index 401f93f..acd7b9e 100644
+--- a/node_modules/expo-updates/ios/EXUpdates/UpdatesUtils.swift
++++ b/node_modules/expo-updates/ios/EXUpdates/UpdatesUtils.swift
+@@ -29,7 +29,11 @@ public final class UpdatesUtils: NSObject {
+ 
+   public static func initializeUpdatesDirectory() throws -> URL {
+     let fileManager = FileManager.default
++    #if os(tvOS)
++    let applicationDocumentsDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).last!
++    #else
+     let applicationDocumentsDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).last!
++    #endif
+     let updatesDirectory = applicationDocumentsDirectory.appendingPathComponent(".expo-internal")
+     let updatesDirectoryPath = updatesDirectory.path
+ 
