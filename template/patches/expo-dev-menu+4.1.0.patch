@@ -1,0 +1,148 @@
+diff --git a/node_modules/expo-dev-menu/expo-dev-menu.podspec b/node_modules/expo-dev-menu/expo-dev-menu.podspec
+index d28217f..1325957 100644
+--- a/node_modules/expo-dev-menu/expo-dev-menu.podspec
++++ b/node_modules/expo-dev-menu/expo-dev-menu.podspec
+@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
+   s.license        = package['license']
+   s.author         = package['author']
+   s.homepage       = package['homepage']
+-  s.platform       = :ios, '13.0'
++  s.platforms      = { :ios => '13.0', :tvos => '13.0' }
+   s.swift_version  = '5.2'
+   s.source         = { git: 'https://github.com/expo/expo.git' }
+   s.static_framework = true
+@@ -96,6 +96,7 @@ Pod::Spec.new do |s|
+     s.source_files   = 'ios/**/*.{h,m,mm,swift}'
+     s.preserve_paths = 'ios/**/*.{h,m,mm,swift}'
+     s.exclude_files  = 'ios/*Tests/**/*', 'ios/ReactNativeCompatibles/**/*', 'vendored/**/*'
++    s.tvos.exclude_files = 'ios/**/DevMenuGestureRecognizer*.swift', 'ios/**/DevMenuTouchInterceptor*.swift'
+     s.compiler_flags = compiler_flags
+ 
+     main.dependency 'React-Core'
+diff --git a/node_modules/expo-dev-menu/ios/DevMenuViewController.swift b/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
+index c5e7494..a2ed822 100644
+--- a/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
++++ b/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
+@@ -44,11 +44,13 @@ class DevMenuViewController: UIViewController {
+     reactRootView?.becomeFirstResponder()
+   }
+ 
++  #if !os(tvOS)
+   override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+     get {
+       return UIInterfaceOrientationMask.all
+     }
+   }
++  #endif
+ 
+   @available(iOS 12.0, *)
+   override var overrideUserInterfaceStyle: UIUserInterfaceStyle {
+diff --git a/node_modules/expo-dev-menu/ios/DevMenuWindow.swift b/node_modules/expo-dev-menu/ios/DevMenuWindow.swift
+index 68b4f8d..6d327ed 100644
+--- a/node_modules/expo-dev-menu/ios/DevMenuWindow.swift
++++ b/node_modules/expo-dev-menu/ios/DevMenuWindow.swift
+@@ -37,7 +37,11 @@ class DevMenuWindow: UIWindow, OverlayContainerViewControllerDelegate {
+     self.rootViewController = bottomSheetController
+     self.backgroundColor = UIColor(white: 0, alpha: 0.4)
+     self.bounds = UIScreen.main.bounds
++    #if os(tvOS)
++    self.windowLevel = .normal
++    #else
+     self.windowLevel = .statusBar
++    #endif
+     self.isHidden = true
+   }
+ 
+diff --git a/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift b/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift
+index 8d221b4..773a868 100644
+--- a/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift
++++ b/node_modules/expo-dev-menu/ios/Modules/DevMenuInternalModule.swift
+@@ -1,7 +1,6 @@
+ // Copyright 2015-present 650 Industries. All rights reserved.
+ 
+ import ExpoModulesCore
+-import SafariServices
+ import React
+ 
+ public class DevMenuInternalModule: Module {
+@@ -79,8 +78,10 @@ public class DevMenuInternalModule: Module {
+     }
+ 
+     AsyncFunction("copyToClipboardAsync") { (content: String) in
++      #if !os(tvOS)
+       let clipboard = UIPasteboard.general
+       clipboard.string = content as String
++      #endif
+     }
+   }
+ }
+diff --git a/node_modules/expo-dev-menu/ios/Modules/DevMenuPreferences.swift b/node_modules/expo-dev-menu/ios/Modules/DevMenuPreferences.swift
+index 38d5b64..0948c82 100644
+--- a/node_modules/expo-dev-menu/ios/Modules/DevMenuPreferences.swift
++++ b/node_modules/expo-dev-menu/ios/Modules/DevMenuPreferences.swift
+@@ -37,9 +37,14 @@ public class DevMenuPreferences: Module {
+      We don't want to uninstall `DevMenuMotionInterceptor`, because otherwise, the app on shake gesture will bring up the dev-menu from the RN.
+      So we added `isEnabled` to disable it, but not uninstall.
+      */
++    #if os(tvOS)
++    DevMenuMotionInterceptor.isInstalled = false
++    DevMenuMotionInterceptor.isEnabled = false
++    #else
+     DevMenuMotionInterceptor.isInstalled = true
+     DevMenuMotionInterceptor.isEnabled = DevMenuPreferences.motionGestureEnabled
+     DevMenuTouchInterceptor.isInstalled = DevMenuPreferences.touchGestureEnabled
++    #endif
+     DevMenuKeyCommandsInterceptor.isInstalled = DevMenuPreferences.keyCommandsEnabled
+   }
+ 
+@@ -59,6 +64,15 @@ public class DevMenuPreferences: Module {
+   /**
+    Whether to enable three-finger long press gesture.
+    */
++  #if os(tvOS)
++  static var touchGestureEnabled: Bool {
++    get {
++      return false
++    }
++    set {
++    }
++  }
++  #else
+   static var touchGestureEnabled: Bool {
+     get {
+       return boolForKey(touchGestureEnabledKey)
+@@ -68,6 +82,7 @@ public class DevMenuPreferences: Module {
+       DevMenuTouchInterceptor.isInstalled = newValue
+     }
+   }
++  #endif
+ 
+   /**
+    Whether to enable key commands.
+diff --git a/node_modules/expo-dev-menu/ios/OverlayContainer/OverlayContainerViewController.swift b/node_modules/expo-dev-menu/ios/OverlayContainer/OverlayContainerViewController.swift
+index ac40951..629e08a 100644
+--- a/node_modules/expo-dev-menu/ios/OverlayContainer/OverlayContainerViewController.swift
++++ b/node_modules/expo-dev-menu/ios/OverlayContainer/OverlayContainerViewController.swift
+@@ -17,6 +17,10 @@ import UIKit
+ /// It stacks the other view controllers on top of each other, if any, and adds them underneath the overlay view controller.
+ open class OverlayContainerViewController: UIViewController {
+ 
++  #if os(tvOS)
++  public func setNeedsStatusBarAppearanceUpdate() {}
++  #endif
++
+     /// `OverlayStyle` defines how the overlay view controller will be constrained in the container.
+     public enum OverlayStyle {
+         /// The overlay view controller will not be height-constrained. It will grow and shrink
+@@ -57,9 +61,11 @@ open class OverlayContainerViewController: UIViewController {
+         return viewControllers.last
+     }
+ 
++  #if !os(tvOS)
+     open override var childForStatusBarStyle: UIViewController? {
+         return topViewController
+     }
++  #endif
+ 
+     /// The scroll view managing the overlay translation.
+     weak open var drivingScrollView: UIScrollView? {
