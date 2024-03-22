@@ -110,8 +110,6 @@ dependencies {
     // we use the io.github.react-native-tvos group for the react-android and hermes-android dependencies
 
     implementation("io.github.react-native-tvos:react-android")
-    // No Flipper for TV
-    // implementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("io.github.react-native-tvos:hermes-android")
