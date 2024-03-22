@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
+    "clean-ios": "rm -rf ios/build ios/Pods ios/Podfile.lock",
+    "setup-ios": "RCT_NEW_ARCH_ENABLED=1 npx pod-install",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "tvos": "expo run:ios --scheme HelloWorld-tvOS --device \"Apple TV\"",
@@ -28,6 +31,8 @@
     "babel-jest": "^29.6.3",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
     "typescript": "5.0.4"
